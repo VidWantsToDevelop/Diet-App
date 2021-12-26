@@ -1,0 +1,17 @@
+{%extends 'dietApp/layout.html'%}{%load static%} {%block title%} My
+profile{%endblock%} {% block body %}
+<div class="profile-body">
+  <div class="profile-wrapper">
+    <div class="profile-parts">
+      <div class="parts-choice">
+        <h3 id="button-history" style="margin-right: 1rem">History</h3>
+        <h3 id="button-update" style="margin-left: 1rem">Update</h3>
+      </div>
+      <div class="parts-body">
+        <div class="part-history"></div>
+        <div class="part-update"></div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock body %}
