@@ -7,7 +7,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.db import IntegrityError
 
-from .models import User, Profile
+from .models import User, Profile, Fragment
 
 # Create your views here.
 
@@ -85,3 +85,19 @@ def register(request):
 
 def profile(request, user):
     return render(request, 'dietApp/profile.html')
+
+def create_day(request):
+    print("REQUEST")
+    profile = Profile.objects.get(user = request.user)
+    print(profile.user)
+    calorie = 3650
+    burnt = 1532
+    fats = 25
+    carbs = 40
+    proteins = 35
+    day = Fragment(calories = calorie, burnt = burnt, fats = fats, carbs = carbs, proteins = proteins)
+    day.save()
+    print(day.calories)
+    print("*********")
+    print(Fragment.objects.filter(calories = 2230))
+    return render(request, 'dietApp/index.html')

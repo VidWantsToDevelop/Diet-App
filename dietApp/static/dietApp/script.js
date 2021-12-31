@@ -60,3 +60,5 @@ function float(el, clicked) {
     clicked = 0
   }
 }
+
+function changeDay(day) {}
