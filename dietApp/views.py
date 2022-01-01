@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.db import IntegrityError
+import datetime
 
 from .models import User, Profile, Fragment
 
@@ -91,10 +92,30 @@ def profile(request, user):
     print("Profile rendering")
     profile = Profile.objects.get(user = request.user)
     dates = profile.days.all()
+    datesList = []
+    caloriesList = []
+    burntList = []
+    cfpList = []
+    for date in dates:
+        if date.date.day == datetime.date.today().day:
+            cfpList.append(date.carbs)
+            cfpList.append(date.fats)
+            cfpList.append(date.proteins)
+        if date.date.month == datetime.datetime.today().month:
+            datesList.append(f"Day:{date.date.day} Month:{date.date.month}")
+            caloriesList.append(date.calories)
+            burntList.append(date.burnt)
+        else:
+            print("Wrong month")
     print(profile.user)
     print(dates)
+    print("*"*85)
     return render(request, 'dietApp/profile.html', {
         "dates": dates,
+        "datesList": datesList,
+        "caloriesList": caloriesList,
+        "burntList": burntList,
+        "cfpList": cfpList,
     })
 
 def create_day(request):
@@ -106,7 +127,7 @@ def create_day(request):
     fats = 25
     carbs = 40
     proteins = 35
-    day = Fragment(calories = calorie, burnt = burnt, fats = fats, carbs = carbs, proteins = proteins)
+    day = Fragment(date = datetime.datetime.today(), calories = calorie, burnt = burnt, fats = fats, carbs = carbs, proteins = proteins)
     day.save()
     profile.days.add(day)
     print("*********")

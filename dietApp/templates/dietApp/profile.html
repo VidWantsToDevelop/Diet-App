@@ -86,35 +86,90 @@ profile{%endblock%} {% block body %}
               </div>
               <div class="history-body2">
                 <h1>Charts:</h1>
-                <div id="container" style="width: 75%">
-                  <canvas id="pie-chart"></canvas>
-                </div>
-
-                <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
-                <script>
-
-                  var config = {
-                    type: 'pie',
-                    data: {
-                      datasets: [{
-                        data: {{ data|safe }},
-                        backgroundColor: [
-                          '#696969', '#808080', '#A9A9A9', '#C0C0C0', '#D3D3D3'
+                <div class="charts-bar">
+                  <canvas id="myChart" width="400" height="400"></canvas>
+                  <script>
+                    const ctx = document
+                      .getElementById('myChart')
+                      .getContext('2d')
+                    const myChart = new Chart(ctx, {
+                      type: 'bar',
+                      data: {
+                        labels: {{ datesList|safe }},
+                        datasets: [
+                          {
+                            label: 'Amount of the calories consumed',
+                            data: {{ caloriesList|safe }},
+                            backgroundColor: [
+                              {% for date in burntList %}
+                              'rgba(153, 102, 255, 0.8)',
+                              {% endfor %}
+                            ],
+                            borderColor: [
+                              {% for date in burntList %}
+                              'rgba(153, 102, 255, 0.2)',
+                              {% endfor %}
+                            ],
+                            borderWidth: 1,
+                          },
+                          {
+                            label: 'Amount of calories burnt',
+                            data: {{ burntList|safe }},
+                            backgroundColor: [
+                              {% for date in burntList %}
+                              'rgba(255, 99, 132, 0.8)',
+                              {% endfor %}
+                            ],
+                            borderColor: [
+                              {% for date in burntList %}
+                              'rgba(255, 99, 132, 0.2)',
+                              {% endfor %}
+                            ],
+                            borderWidth: 1,
+                          },
                         ],
-                        label: 'Population'
-                      }],
-                      labels: {{ labels|safe }}
-                    },
-                    options: {
-                      responsive: true
-                    }
-                  };
+                      },
+                      options: {
+                        scales: {
+                          y: {
+                            beginAtZero: true,
+                          },
+                        },
+                      },
+                    })
+                  </script>
+                  <h1>Doughnut</h1>
+                  <div id="container" style="width: 75%">
+                    <canvas id="pie-chart"></canvas>
+                  </div>
 
-                  window.onload = function() {
-                    var ctx = document.getElementById('pie-chart').getContext('2d');
-                    window.myPie = new Chart(ctx, config);
-                  };
-                </script>
+                  <script>
+
+                    var config = {
+                      type: 'pie',
+                      data: {
+                        datasets: [{
+                          data: {{ cfpList|safe }},
+                          backgroundColor: [
+                            'rgb(255, 99, 132)',
+                            'rgb(54, 162, 235)',
+                            'rgb(255, 205, 86)'
+                          ],
+                          label: 'Population'
+                        }],
+                        labels: ['carbs', 'fats', 'proteins']
+                      },
+                      options: {
+                        responsive: true
+                      }
+                    };
+
+                    window.onload = function() {
+                      var ctx = document.getElementById('pie-chart').getContext('2d');
+                      window.myPie = new Chart(ctx, config);
+                    };
+                  </script>
+                </div>
               </div>
             </div>
           </div>

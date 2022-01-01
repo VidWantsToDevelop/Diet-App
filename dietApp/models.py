@@ -7,7 +7,7 @@ class User(AbstractUser):
  pass
 
 class Fragment(models.Model):
- date = models.DateField(auto_now_add=True)
+ date = models.DateField()
  calories = models.IntegerField()
  burnt = models.IntegerField()
  carbs = models.IntegerField()
