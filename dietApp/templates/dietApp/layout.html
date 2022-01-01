@@ -60,7 +60,9 @@
               <a class="nav-link" href="#">###</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'logout' %}">Log out</a>
+              <a class="nav-link" id="button-logout" href="{% url 'logout' %}"
+                >Log out</a
+              >
             </li>
             {% else %}
             <li class="nav-item">

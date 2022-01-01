@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.http.response import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.db import IntegrityError
@@ -16,7 +17,10 @@ from .models import User, Profile, Fragment
 def index(request):
     #Also check if the user already has profile (if he doesn't then - create one)
     print(request.user)
-    user = User.objects.get(username = request.user)
+    try:
+        user = User.objects.get(username = request.user)
+    except:
+        return render(request, "dietApp/index.html")
     try:
         profile = Profile.objects.get(user = user)
         print("profile exist")
@@ -84,20 +88,35 @@ def register(request):
         })
 
 def profile(request, user):
-    return render(request, 'dietApp/profile.html')
+    print("Profile rendering")
+    profile = Profile.objects.get(user = request.user)
+    dates = profile.days.all()
+    print(profile.user)
+    print(dates)
+    return render(request, 'dietApp/profile.html', {
+        "dates": dates,
+    })
 
 def create_day(request):
     print("REQUEST")
     profile = Profile.objects.get(user = request.user)
     print(profile.user)
-    calorie = 3650
+    calorie = 1560
     burnt = 1532
     fats = 25
     carbs = 40
     proteins = 35
     day = Fragment(calories = calorie, burnt = burnt, fats = fats, carbs = carbs, proteins = proteins)
     day.save()
-    print(day.calories)
+    profile.days.add(day)
     print("*********")
-    print(Fragment.objects.filter(calories = 2230))
-    return render(request, 'dietApp/index.html')
+    print(day.calories)
+    return JsonResponse({"message": "Data will be updated on your next visit"}, status = 200)
+
+@login_required
+@csrf_exempt
+def render_day(request,day):
+    fragment = list(Fragment.objects.filter(pk=day).values())
+    print("*"*58)
+    print(fragment)
+    return JsonResponse(fragment, safe=False, status = 200)

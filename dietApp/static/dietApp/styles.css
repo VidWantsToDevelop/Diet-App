@@ -305,3 +305,9 @@ footer {
 .history-body2 {
   margin-top: 3rem;
 }
+
+/*Statistics*/
+.statistics > * {
+  display: flex;
+  flex-direction: row;
+}
