@@ -4,8 +4,12 @@ profile{%endblock%} {% block body %}
   <div class="profile-wrapper">
     <div class="profile-parts">
       <div class="parts-choice">
-        <h3 id="button-history" style="margin-right: 1rem">History</h3>
-        <h3 id="button-update" style="margin-left: 1rem">Update</h3>
+        <h3 id="button-history" style="margin-right: 1rem">
+          <a href="#">History</a>
+        </h3>
+        <h3 id="button-update" style="margin-left: 1rem">
+          <a href="#">Update</a>
+        </h3>
       </div>
       <div class="parts-body">
         <div class="part-history">
@@ -86,96 +90,129 @@ profile{%endblock%} {% block body %}
               </div>
               <div class="history-body2">
                 <h1>Charts:</h1>
-                <div class="charts-bar">
-                  <canvas id="myChart" width="400" height="400"></canvas>
-                  <script>
-                    const ctx = document
-                      .getElementById('myChart')
-                      .getContext('2d')
-                    const myChart = new Chart(ctx, {
-                      type: 'bar',
-                      data: {
-                        labels: {{ datesList|safe }},
-                        datasets: [
-                          {
-                            label: 'Amount of the calories consumed',
-                            data: {{ caloriesList|safe }},
-                            backgroundColor: [
-                              {% for date in burntList %}
-                              'rgba(153, 102, 255, 0.8)',
-                              {% endfor %}
-                            ],
-                            borderColor: [
-                              {% for date in burntList %}
-                              'rgba(153, 102, 255, 0.2)',
-                              {% endfor %}
-                            ],
-                            borderWidth: 1,
-                          },
-                          {
-                            label: 'Amount of calories burnt',
-                            data: {{ burntList|safe }},
-                            backgroundColor: [
-                              {% for date in burntList %}
-                              'rgba(255, 99, 132, 0.8)',
-                              {% endfor %}
-                            ],
-                            borderColor: [
-                              {% for date in burntList %}
-                              'rgba(255, 99, 132, 0.2)',
-                              {% endfor %}
-                            ],
-                            borderWidth: 1,
-                          },
-                        ],
-                      },
-                      options: {
-                        scales: {
-                          y: {
-                            beginAtZero: true,
+                <div class="charts">
+                  <div class="charts-bar">
+                    <p>Graph for the current week</p>
+                    <div class="container">
+                      <canvas id="myChart" width="50%" height="50%"></canvas>
+                    </div>
+                    <script>
+                      const ctx = document
+                        .getElementById('myChart')
+                        .getContext('2d')
+                      const myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                          labels: {{ datesList|safe }},
+                          datasets: [
+                            {
+                              label: 'Amount of the calories consumed',
+                              data: {{ caloriesList|safe }},
+                              backgroundColor: [
+                                {% for date in burntList %}
+                                'rgba(153, 102, 255, 0.8)',
+                                {% endfor %}
+                              ],
+                              borderColor: [
+                                {% for date in burntList %}
+                                'rgba(153, 102, 255, 0.2)',
+                                {% endfor %}
+                              ],
+                              borderWidth: 1,
+                            },
+                            {
+                              label: 'Amount of calories burnt',
+                              data: {{ burntList|safe }},
+                              backgroundColor: [
+                                {% for date in burntList %}
+                                'rgba(255, 99, 132, 0.8)',
+                                {% endfor %}
+                              ],
+                              borderColor: [
+                                {% for date in burntList %}
+                                'rgba(255, 99, 132, 0.2)',
+                                {% endfor %}
+                              ],
+                              borderWidth: 1,
+                            },
+                          ],
+                        },
+                        options: {
+                          scales: {
+                            y: {
+                              beginAtZero: true,
+                            },
                           },
                         },
-                      },
-                    })
-                  </script>
-                  <h1>Doughnut</h1>
-                  <div id="container" style="width: 75%">
-                    <canvas id="pie-chart"></canvas>
+                      })
+                    </script>
                   </div>
+                  {% if cfpList %}
+                  <div class="charts-pie">
+                    <p>Your Fats/Carbs/Proteins ratio</p>
+                    <div class="container">
+                      <canvas id="pie-chart" width="50%" height="50%"></canvas>
+                    </div>
 
-                  <script>
+                    <script>
 
-                    var config = {
-                      type: 'pie',
-                      data: {
-                        datasets: [{
-                          data: {{ cfpList|safe }},
-                          backgroundColor: [
-                            'rgb(255, 99, 132)',
-                            'rgb(54, 162, 235)',
-                            'rgb(255, 205, 86)'
-                          ],
-                          label: 'Population'
-                        }],
-                        labels: ['carbs', 'fats', 'proteins']
-                      },
-                      options: {
-                        responsive: true
-                      }
-                    };
+                      var config = {
+                        type: 'pie',
+                        data: {
+                          datasets: [{
+                            data: {{ cfpList|safe }},
+                            backgroundColor: [
+                              'rgb(255, 99, 132)',
+                              'rgb(54, 162, 235)',
+                              'rgb(255, 205, 86)'
+                            ],
+                            label: 'Population'
+                          }],
+                          labels: ['carbs', 'fats', 'proteins']
+                        },
+                        options: {
+                          responsive: true
+                        }
+                      };
 
-                    window.onload = function() {
-                      var ctx = document.getElementById('pie-chart').getContext('2d');
-                      window.myPie = new Chart(ctx, config);
-                    };
-                  </script>
+                      window.onload = function() {
+                        var ctx = document.getElementById('pie-chart').getContext('2d');
+                        window.myPie = new Chart(ctx, config);
+                      };
+                    </script>
+                  </div>
+                  {%else%}
+                  <p id='pie-chart-else'>You haven't completed your daily check-in form yet ✍️</p>
+                  {%endif%}
                 </div>
               </div>
             </div>
           </div>
         </div>
         <div class="part-update">
-          <h1>UPUDATE</h1>
+          <h1>DAILY CHECK-IN</h1>
+          <div class="update-form">
+            <p>
+              If you would like to add your daily records, please fill each
+              of the field everyday
+            </p>
+            <form action="{% url "createDay" %}" method="POST">
+              {% csrf_token %}
+              <label for="calories"
+                >Calories consumed today</label
+              >
+              <input name="calories" type="text" />
+              <label for="burnt">Calories burnt today</label>
+              <input name="burnt" type="text" />
+              <label for="carbs">CARBOHYDRATES (in %)</label>
+              <input name="carbs" type="text" />
+              <label for="fats">FATS (in %)</label>
+              <input name="fats" type="text" />
+              <label for="proteins">PROTEINS (in %)</label>
+              <input name="proteins" type="text" />
+              <input  style = 'margin-top:2rem'type="submit" value='Submit' />
+            </form>
+          </div>
         </div>
       </div>
     </div>

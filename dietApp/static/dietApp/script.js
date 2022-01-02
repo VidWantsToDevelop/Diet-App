@@ -19,6 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //Statistics change (depends of the date)
   if (statisticsForm) {
+    const historyBtn = document.querySelector('#button-history')
+    const updateBtn = document.querySelector('#button-update')
     const consumed = document.querySelector(
       '.statistics-consumed'
     ).firstElementChild
@@ -28,6 +30,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const proteins = document.querySelector(
       '.statistics-proteins'
     ).firstElementChild
+    const history2 = document.querySelector('.history-2')
+    const historyPart = document.querySelector('.part-history')
+    const updatePart = document.querySelector('.part-update')
     document.querySelectorAll('.button-date').forEach((btn) => {
       btn.addEventListener('click', () => {
         console.log('Date is chosen')
@@ -42,7 +47,19 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
         fetchDay()
+        history2.style.animationPlayState = 'running'
       })
+    })
+    //Floating animation for the history and update bodies
+    historyBtn.addEventListener('click', () => {
+      historyPart.style.display = 'block'
+      updatePart.style.display = 'none'
+      historyPart.style.animationPlayState = 'running'
+    })
+    updateBtn.addEventListener('click', () => {
+      updatePart.style.display = 'flex'
+      historyPart.style.display = 'none'
+      updatePart.style.animationPlayState = 'running'
     })
   }
 

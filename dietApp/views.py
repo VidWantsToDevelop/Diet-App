@@ -8,6 +8,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.db import IntegrityError
 import datetime
+import operator
 
 from .models import User, Profile, Fragment
 
@@ -94,45 +95,75 @@ def profile(request, user):
     dates = profile.days.all()
     datesList = []
     caloriesList = []
+    totalCaloriesList = []
+    totalBurntList = []
     burntList = []
     cfpList = []
-    for date in dates:
+    totalCalories = 0
+    totalBurnt = 0
+    ordered = sorted(dates, key=operator.attrgetter('pk'))
+    print(ordered)
+    for date in ordered:
+        print(totalCaloriesList)
+        print("SAS")
         if date.date.day == datetime.date.today().day:
             cfpList.append(date.carbs)
             cfpList.append(date.fats)
             cfpList.append(date.proteins)
         if date.date.month == datetime.datetime.today().month:
-            datesList.append(f"Day:{date.date.day} Month:{date.date.month}")
-            caloriesList.append(date.calories)
-            burntList.append(date.burnt)
+            totalCalories = totalCalories + date.calories
+            totalBurnt = totalBurnt + date.burnt
+            if date.date.weekday() == 0:
+                print("IT IS MONDAY")
+                datesList.append(f"Sunday Day:{date.date.day}")
+                totalCaloriesList.append(totalCalories)
+                totalBurntList.append(totalBurnt)
+                caloriesList.append(date.calories)
+                burntList.append(date.burnt)
+                totalCalories = 0
+                totalBurnt = 0
+                print(totalCaloriesList)
+                print(totalBurntList)
+            else:
+                print("It is not monday")
         else:
             print("Wrong month")
     print(profile.user)
     print(dates)
     print("*"*85)
     return render(request, 'dietApp/profile.html', {
-        "dates": dates,
+        "dates": ordered,
         "datesList": datesList,
-        "caloriesList": caloriesList,
-        "burntList": burntList,
+        "caloriesList": totalCaloriesList,
+        "burntList": totalBurntList,
         "cfpList": cfpList,
     })
 
 def create_day(request):
-    print("REQUEST")
-    profile = Profile.objects.get(user = request.user)
-    print(profile.user)
-    calorie = 1560
-    burnt = 1532
-    fats = 25
-    carbs = 40
-    proteins = 35
-    day = Fragment(date = datetime.datetime.today(), calories = calorie, burnt = burnt, fats = fats, carbs = carbs, proteins = proteins)
-    day.save()
-    profile.days.add(day)
-    print("*********")
-    print(day.calories)
-    return JsonResponse({"message": "Data will be updated on your next visit"}, status = 200)
+    if request.method == "POST":
+        print("REQUEST")
+        profile = Profile.objects.get(user = request.user)
+        check = profile.days.filter(date = datetime.datetime.today())
+        if check:
+            return render(request, "dietApp/response.html", {
+                "message": "You have already filled todays form. Wait till the next day"
+            })
+        else:
+            print('date has been added into the database')
+        print(profile.user)
+        calorie = request.POST.get("calories")
+        burnt = request.POST.get('burnt')
+        fats = request.POST.get('fats')
+        carbs = request.POST.get('carbs')
+        proteins = request.POST.get('proteins')
+        day = Fragment(date = datetime.datetime.today(), calories = calorie, burnt = burnt, fats = fats, carbs = carbs,     proteins = proteins)
+        day.save()
+        profile.days.add(day)
+        print("*********")
+        print(day.calories)
+        return HttpResponseRedirect(reverse('profile', args=[request.user.username]))
+    else:
+        return JsonResponse({"message": "Wrong request method"}, status = 404)
 
 @login_required
 @csrf_exempt
