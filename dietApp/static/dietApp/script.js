@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let loginForm = document.querySelector('#button-login')
   let logoutButton = document.querySelector('#button-logout')
   let statisticsForm = document.querySelector('.statistics')
+  let plansBody = document.querySelectorAll('.plans-body')
 
   //ArrowDown function (scroll the page)
   if (document.title === 'HI') {
@@ -63,6 +64,26 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   }
 
+  //Checks if it's a plans' page
+  if (plansBody) {
+    //Animations for the diet plans element
+    document.querySelectorAll('.plan').forEach((el) => {
+      el.firstElementChild.addEventListener('click', () => {
+        planDeploy(el.lastElementChild)
+      })
+    })
+    document.querySelectorAll('.btn').forEach((el) => {
+      el.addEventListener('click', () => {
+        let planDescription = el.previousElementSibling.innerText
+        let planName =
+          el.parentElement.parentElement.previousElementSibling.innerHTML
+        console.log(planDescription)
+        console.log(planName)
+        addPlan(planName, planDescription)
+      })
+    })
+  }
+
   //Checks user's authentication status
   if (logoutButton) {
     console.log('User has been authenticated')
@@ -115,10 +136,39 @@ function float(el, clicked) {
   }
 }
 
+function planDeploy(el) {
+  let emptySpace = document.querySelector('.empty-space')
+  el.style.animationPlayState = 'running'
+  el.addEventListener('animationend', () => {
+    el.parentElement.style.animationPlayState = 'running'
+    el.firstElementChild.style.animationPlayState = 'running'
+    emptySpace.style.height = '20vh'
+    el.firstElementChild.lastElementChild.addEventListener('click', () => {
+      el.firstElementChild.lastElementChild.style.animationPlayState = 'running'
+      el.firstElementChild.lastElementChild.innerText = 'Done'
+    })
+    console.log('Ended')
+  })
+}
+
 function renderDay(day) {
   return fetch(`http://127.0.0.1:8000/render_day/${day}`)
     .then((response) => response.json())
     .then((answer) => {
       return answer[0]
+    })
+}
+
+function addPlan(planName, planDescription) {
+  return fetch(`http://127.0.0.1:8000/addPlan/`, {
+    method: 'POST',
+    body: JSON.stringify({
+      name: planName,
+      description: planDescription,
+    }),
+  })
+    .then((response) => response.json())
+    .then((answer) => {
+      console.log(answer)
     })
 }

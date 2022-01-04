@@ -1,0 +1,97 @@
+{%extends 'dietApp/layout.html'%} {%load static%} {%block 'title'%}Diet
+plans{%endblock%} {% block body %}
+<div class="plans-wrapper">
+  <div class="plans-body">
+    <h3>Make your choice....</h3>
+    <p>
+      If you would like to choose one of the given plans as your current, you
+      will be receiving navigations upon your chosen plan on your profile page.
+      Moreover, here you can find out more information about certain diet plans,
+      some advices as well as pros and cons.
+    </p>
+    <div class="plans">
+      <div id="plan1" class="plan">
+        <h4>The Paleo Diet</h4>
+        <div class="plan-wrapper">
+          <div class="plan-text">
+            <p>
+              The paleo diet claims that you should eat the same foods that your
+              hunter-gatherer ancestors ate before agriculture developed.
+              <p style='color:green'>Weight loss; Reducing risk factors for heart disease</p>
+              <p style='color:red'>Eliminates healthy grains</p>
+            </p>
+            <button class="btn">Choose</button>
+          </div>
+        </div>
+      </div>
+      <div id="plan2" class="plan">
+        <h4>The vegan diet</h4>
+        <div class="plan-wrapper">
+          <div class="plan-text">
+            <p>
+              The vegan diet restricts all animal products for ethical, environmental, or health reasons.
+              <p style='color:green'>Weight loss; Reducing risk of Alzheimer's disease</p>
+              <p style='color:red'>Because vegan diets eliminate animal foods completely, they may be low in several nutrients.</p>
+            </p>
+            <button class="btn">Choose</button>
+          </div>
+        </div>
+      </div>
+      <div id="plan3" class="plan">
+        <h4>Low-Carb Diet</h4>
+        <div class="plan-wrapper">
+          <div class="plan-text">
+            <p>
+              There are several types of low-carb diets, but all involve limiting carb intake to 20–150 grams per day. The primary aim of the diet is to force your body to use more fats for fuel instead of using carbs as a main source of energy.
+              <p style='color:green'>Weight loss; Reduce your appetite</p>
+              <p style='color:red'>Danger of "bad" LDL cholesterol</p>
+            </p>
+            <button class="btn">Choose</button>
+          </div>
+        </div>
+      </div>
+      <div id="plan4" class="plan">
+        <h4>The Dukan Diet</h4>
+        <div class="plan-wrapper">
+          <div class="plan-text">
+            <p>
+              The Dukan diet is a high-protein, low-carb weight loss diet split into four phases — two weight loss phases and two maintenance phases.
+              <p style='color:green'>Weight loss; Higher metabolic rate</p>
+              <p style='color:red'>Fast weight loss achieved by severe calorie restriction tends to cause significant muscle loss.</p>
+            </p>
+            <button class="btn">Choose</button>
+          </div>
+        </div>
+      </div>
+      <div id="plan5" class="plan">
+        <h4>The Ultra-Low-Fat Diet</h4>
+        <div class="plan-wrapper">
+          <div class="plan-text">
+            <p>
+              The paleo diet claims that you should eat the same foods that your
+              hunter-gatherer ancestors ate before agriculture developed.
+              <p style='color:green'>Reducing factors of heart disease, improvement in type 2 diabetes</p>
+              <p style='color:red'>The fat restriction may cause long-term problems, these include helping build cell membranes.</p>
+            </p>
+            <button class="btn">Choose</button>
+          </div>
+        </div>
+      </div>
+      <div id="plan6" class="plan">
+        <h4>Intermittent Fasting</h4>
+        <div class="plan-wrapper">
+          <div class="plan-text">
+            <p>
+              Rather than restricting the foods you eat, it controls when you eat them. Thus, it can be seen as more of an eating pattern than a diet.
+              <p style='color:green'>Increased levels of human growth hormone (HGH), improved insulin sensitivity, improved cellular repair, and altered gene expressions</p>
+              <p style='color:red'>It does not suit everyone.</p>
+            </p>
+            <button class="btn">Choose</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class='empty-space'></div>
+  </div>
+</div>
+{% endblock body %}

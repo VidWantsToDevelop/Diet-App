@@ -9,6 +9,46 @@
   }
 }
 
+@keyframes clicked {
+  from {
+    background-color: #04aa6d;
+  }
+  to {
+    background-color: red;
+  }
+}
+
+@keyframes borderAppear {
+  from {
+    border: 2px solid rgba(0, 0, 0, 0);
+    margin-top: 3rem;
+    height: 10vh;
+  }
+  to {
+    margin-top: 1.5rem;
+    border: 2px solid rgba(0, 0, 0, 1);
+    height: 80vh;
+  }
+}
+
+@keyframes deployPlanHigh {
+  0% {
+    border: 2px solid rgba(135, 206, 250, 0);
+    width: 0;
+    height: 0;
+  }
+  50% {
+    border: 2px solid rgba(135, 206, 250, 1);
+    width: 6vw;
+    height: 87%;
+  }
+  100% {
+    border: 2px solid rgba(135, 206, 250, 1);
+    width: 100%;
+    height: 87%;
+  }
+}
+
 @keyframes floatStat {
   from {
     opacity: 0;
@@ -36,6 +76,22 @@ footer {
   display: flex;
   flex-direction: column;
   width: 100%;
+}
+
+.empty-space {
+  width: 100%;
+  height: 100vh;
+}
+
+.btn {
+  animation-name: clicked;
+  animation-duration: 2s;
+  animation-fill-mode: forwards;
+  animation-play-state: paused;
+  padding: 12px;
+  color: white;
+  position: absolute;
+  bottom: 1rem;
 }
 
 .response {
@@ -443,4 +499,84 @@ footer {
 
 .update-form > form > input {
   margin-bottom: 1rem;
+}
+
+/* Diet plans page */
+.plans-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.plans-body > * {
+  margin-top: 5vh;
+}
+
+.plans {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  grid-gap: 3rem;
+}
+
+.plan {
+  border: 2px solid black;
+  border-radius: 18px;
+  height: 50vh;
+  width: 20vw;
+  text-align: center;
+  padding: 5px;
+  animation-play-state: paused;
+  animation-name: borderAppear;
+  animation-duration: 2s;
+  animation-fill-mode: forwards;
+}
+
+.plan > h4 {
+  border: 2px solid darkgoldenrod;
+  border-radius: 18px;
+}
+
+.plan-wrapper {
+  animation-name: deployPlanHigh;
+  animation-duration: 2s;
+  animation-play-state: paused;
+  animation-fill-mode: forwards;
+  padding: 6px;
+  border-radius: 18px;
+  position: relative;
+}
+
+.plan-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  animation-name: floatStat;
+  animation-duration: 5s;
+  animation-fill-mode: forwards;
+  animation-play-state: paused;
+}
+
+.plan-text:first-child {
+  display: flex;
+  flex-direction: column;
+}
+
+.plan-text > * {
+  font-size: 13px;
+}
+
+@media only screen and (max-width: 768px) {
+  .plans {
+    grid-gap: 3rem;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(6, 1fr);
+  }
+
+  .plan {
+    height: 75vh;
+    width: 60vw;
+  }
 }

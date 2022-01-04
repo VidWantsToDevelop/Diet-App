@@ -3,14 +3,16 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.http.response import JsonResponse
+from django.views.decorators import csrf
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.db import IntegrityError
 import datetime
 import operator
+import json
 
-from .models import User, Profile, Fragment
+from .models import Plan, User, Profile, Fragment
 
 # Create your views here.
 
@@ -172,3 +174,29 @@ def render_day(request,day):
     print("*"*58)
     print(fragment)
     return JsonResponse(fragment, safe=False, status = 200)
+
+def diet_plans(request):
+    return render(request, 'dietApp/plans.html')
+
+@login_required
+@csrf_exempt
+def add_plan(request):
+    profile = Profile.objects.get(user=request.user)
+    data = json.loads(request.body)
+    plan = data.get("name", "")
+    description = data.get("description", "")
+    print(f"add plan {plan}")
+    print(f"also don't forget about {description}")
+    yourPlan = Plan(name=plan, description= description)
+    try:
+        currentPlan = Plan.objects.get(pk = profile.plan.pk)
+        currentPlan.delete()
+    except:
+        yourPlan.save()
+        profile.plan = yourPlan
+        profile.save()    
+    yourPlan.save()
+    profile.plan = yourPlan
+    profile.save()
+    print(profile.plan.description)
+    return JsonResponse({"message": f"plan {plan} has been added"}, status = 200)

@@ -9,4 +9,6 @@ urlpatterns = [
     path('profile/<str:user>', views.profile, name='profile'),
     path('create_day', views.create_day, name='createDay'),
     path('render_day/<int:day>', views.render_day, name='renderDay'),
+    path('dietPlans', views.diet_plans, name='dietPlans'),
+    path('addPlan/', views.add_plan, name='addPlan')
 ]
