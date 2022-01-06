@@ -7,7 +7,7 @@ b)The second function of this application - is the ability of users to choose on
 
 
 **Distinctiveness and Complexity**:
-First of all, I would like to say that, in this project, I have used some of the new features. Here are some of them: 
+First of all, I would like to say that, in this project I have used some of the new features. Here are some of them: 
 a)Chart.js: Quite interesting JavaScript library which allowed me to implement any kinds of charts and graphs into my project.
 b)Responsive design: That was a really interesting experience of setting up a CSS file for different kinds of screens, that made my project more flexible and reliable.
 c)And my favorite one - Bootstrap: This framework made my life much easier, with the help of bootstrap I have established a lot of elements, for example: footer, navbar (which can even collapse, if you use it on mobile phones)
