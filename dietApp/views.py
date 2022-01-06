@@ -103,27 +103,31 @@ def profile(request, user):
     cfpList = []
     totalCalories = 0
     totalBurnt = 0
+    weekCounter = 1
     ordered = sorted(dates, key=operator.attrgetter('pk'))
     print(ordered)
     for date in ordered:
         print(totalCaloriesList)
         print("SAS")
+        print(date.date.strftime('%B'))
         if date.date.day == datetime.date.today().day:
             cfpList.append(date.carbs)
             cfpList.append(date.fats)
             cfpList.append(date.proteins)
-        if date.date.month == datetime.datetime.today().month:
+        if date.date.month == datetime.date.today().month:
             totalCalories = totalCalories + date.calories
             totalBurnt = totalBurnt + date.burnt
+            print(date.date.weekday())
             if date.date.weekday() == 0:
                 print("IT IS MONDAY")
-                datesList.append(f"Sunday Day:{date.date.day}")
+                datesList.append(f"Week {weekCounter}; Day:{date.date.day}")
                 totalCaloriesList.append(totalCalories)
                 totalBurntList.append(totalBurnt)
                 caloriesList.append(date.calories)
                 burntList.append(date.burnt)
                 totalCalories = 0
                 totalBurnt = 0
+                weekCounter = weekCounter + 1
                 print(totalCaloriesList)
                 print(totalBurntList)
             else:
@@ -131,15 +135,26 @@ def profile(request, user):
         else:
             print("Wrong month")
     print(profile.user)
-    print(dates)
+    print(ordered)
     print("*"*85)
-    return render(request, 'dietApp/profile.html', {
+    #Checks if the user has a chosen diet plan
+    if (profile.plan):
+        return render(request, 'dietApp/profile.html', {
         "dates": ordered,
         "datesList": datesList,
         "caloriesList": totalCaloriesList,
         "burntList": totalBurntList,
         "cfpList": cfpList,
+        'plan': profile.plan,
     })
+    else:
+        return render(request, 'dietApp/profile.html', {
+            "dates": ordered,
+            "datesList": datesList,
+            "caloriesList": totalCaloriesList,
+            "burntList": totalBurntList,
+            "cfpList": cfpList,
+        })
 
 def create_day(request):
     if request.method == "POST":
@@ -153,11 +168,21 @@ def create_day(request):
         else:
             print('date has been added into the database')
         print(profile.user)
-        calorie = request.POST.get("calories")
-        burnt = request.POST.get('burnt')
-        fats = request.POST.get('fats')
-        carbs = request.POST.get('carbs')
-        proteins = request.POST.get('proteins')
+        try:
+            calorie = int(request.POST.get("calories"))
+            burnt = int(request.POST.get('burnt'))
+            fats = int(request.POST.get('fats'))
+            carbs = int(request.POST.get('carbs'))
+            proteins = int(request.POST.get('proteins'))
+        except:
+            return render(request, 'dietApp/response.html', {
+                "message": "Wrong format of the field (Only numbers are acceptable)"
+            })
+        if int(fats)+int(carbs)+int(proteins) != 100:
+            print(int(fats)+int(carbs)+int(proteins))
+            return render(request, 'dietApp/response.html', {
+                "message": "Wrong format for the fats/carbs/proteins ration ( It shouldn't exceed/belittle a number of 100 )"
+            })
         day = Fragment(date = datetime.datetime.today(), calories = calorie, burnt = burnt, fats = fats, carbs = carbs,     proteins = proteins)
         day.save()
         profile.days.add(day)
@@ -185,18 +210,19 @@ def add_plan(request):
     data = json.loads(request.body)
     plan = data.get("name", "")
     description = data.get("description", "")
+    advice = data.get('advice', "")
     print(f"add plan {plan}")
     print(f"also don't forget about {description}")
-    yourPlan = Plan(name=plan, description= description)
+    yourPlan = Plan(name=plan, description= description, advice = advice)
+    yourPlan.save()
     try:
+        print(profile.plan.pk)
         currentPlan = Plan.objects.get(pk = profile.plan.pk)
+        profile.plan = yourPlan
+        profile.save()
         currentPlan.delete()
     except:
         yourPlan.save()
         profile.plan = yourPlan
-        profile.save()    
-    yourPlan.save()
-    profile.plan = yourPlan
-    profile.save()
-    print(profile.plan.description)
+        profile.save()
     return JsonResponse({"message": f"plan {plan} has been added"}, status = 200)

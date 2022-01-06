@@ -10,6 +10,7 @@ class User(AbstractUser):
 class Plan(models.Model):
  name = models.CharField(max_length=64)
  description = models.CharField(max_length=256)
+ advice = models.CharField(max_length=256, blank=True, null=True)
 
 class Fragment(models.Model):
  date = models.DateField()

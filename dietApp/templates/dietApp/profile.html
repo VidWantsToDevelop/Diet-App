@@ -59,6 +59,7 @@ profile{%endblock%} {% block body %}
           <div class="history-2">
             <div class="history-body">
               <div class="history-body1">
+                <div>
                 <h1>Statistics:</h1>
                 <ul class="statistics">
                   <li class="statistics-consumed">
@@ -88,11 +89,19 @@ profile{%endblock%} {% block body %}
                   </li>
                 </ul>
               </div>
+              {%if plan %}
+                <div>
+                  <h5 style='padding: 2rem'>{{plan.name}}</h5>
+                  <p>{{plan.advice}}</p>
+                </div>
+                {% endif %}
+              </div>
               <div class="history-body2">
                 <h1>Charts:</h1>
                 <div class="charts">
                   <div class="charts-bar">
-                    <p>Graph for the current week</p>
+                    <p>Graph for {% with dates|last as last %}{{last.date|date:'F'}}{% endwith %}</p>
+                    {% if datesList %}
                     <div class="container">
                       <canvas id="myChart" width="50%" height="50%"></canvas>
                     </div>
@@ -146,10 +155,13 @@ profile{%endblock%} {% block body %}
                         },
                       })
                     </script>
+                    {% else %}
+                    <p id='pie-chart-else'>We're still collecting data for a week statistics ✍️</p>
+                    {% endif %}
                   </div>
-                  {% if cfpList %}
                   <div class="charts-pie">
-                    <p>Your Fats/Carbs/Proteins ratio</p>
+                    <p>Today's Fats/Carbs/Proteins ratio</p>
+                    {% if cfpList %}
                     <div class="container">
                       <canvas id="pie-chart" width="50%" height="50%"></canvas>
                     </div>
@@ -189,12 +201,12 @@ profile{%endblock%} {% block body %}
             </div>
           </div>
         </div>
+      </div>
         <div class="part-update">
           <h1>DAILY CHECK-IN</h1>
           <div class="update-form">
             <p>
-              If you would like to add your daily records, please fill each
-              of the field everyday
+              If you want to monitor your diet - DON'T forget to fill this form everyday!
             </p>
             <form action="{% url "createDay" %}" method="POST">
               {% csrf_token %}

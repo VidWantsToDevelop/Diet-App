@@ -9,6 +9,9 @@ document.addEventListener('DOMContentLoaded', () => {
   let logoutButton = document.querySelector('#button-logout')
   let statisticsForm = document.querySelector('.statistics')
   let plansBody = document.querySelectorAll('.plans-body')
+  let navBar = document.querySelector('.navbar-nav')
+  let navBarToggler = document.querySelector('.navbar-toggler')
+  console.log(navBarToggler)
 
   //ArrowDown function (scroll the page)
   if (document.title === 'HI') {
@@ -34,6 +37,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const history2 = document.querySelector('.history-2')
     const historyPart = document.querySelector('.part-history')
     const updatePart = document.querySelector('.part-update')
+    const historyBody1 = document.querySelector('.history-body1')
+    //Properly set up height attribute for the historyBody1's children elements
+    console.log(historyBody1.firstElementChild.offsetHeight)
+    historyBody1.lastElementChild.style.height = `${historyBody1.firstElementChild.offsetHeight}px`
     document.querySelectorAll('.button-date').forEach((btn) => {
       btn.addEventListener('click', () => {
         console.log('Date is chosen')
@@ -74,12 +81,21 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     document.querySelectorAll('.btn').forEach((el) => {
       el.addEventListener('click', () => {
-        let planDescription = el.previousElementSibling.innerText
+        let planDescription = el.parentElement.firstElementChild.innerText
         let planName =
           el.parentElement.parentElement.previousElementSibling.innerHTML
+        let planAdvice = el.parentElement.lastElementChild.innerText
         console.log(planDescription)
         console.log(planName)
-        addPlan(planName, planDescription)
+        console.log(planAdvice)
+        addPlan(planName, planDescription, planAdvice)
+      })
+    })
+
+    //Implementing animation into the .plan-btn button
+    document.querySelectorAll('.btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        btn.style.animationPlayState = 'running'
       })
     })
   }
@@ -159,12 +175,13 @@ function renderDay(day) {
     })
 }
 
-function addPlan(planName, planDescription) {
+function addPlan(planName, planDescription, planAdvice) {
   return fetch(`http://127.0.0.1:8000/addPlan/`, {
     method: 'POST',
     body: JSON.stringify({
       name: planName,
       description: planDescription,
+      advice: planAdvice,
     }),
   })
     .then((response) => response.json())
