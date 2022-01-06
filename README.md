@@ -18,3 +18,12 @@ f)For the proper work of bootstrap functions I have connected the jQuery library
 
 **Project construction**:
 My web application ( Capstone ) is a Django-based one, it consists of one model called DietApp. The only instruments I have been using in this project are: Django's features for the work with databases and other back-end stuff; JavaScript (including some additional JavaScript libraries like Chart.js); HTML as the front-end of the pages, CSS for a styling and mobile responsiveness purposes.
+
+
+**How to run this project**:
+I believe there are no pre-required files or libraries that must be downloaded. So, you just need to have python and Django framework been installed. I'm not really sure, but maybe the only thing you have to do before running the server is to make migrations from the database. You have to open the directory of the web application in your prompt, then write down these commands:
+a)python manage.py makemigrations dietApp
+b)python manage.py migrate
+after these preparations, I believe you will be able to start this project by writing down
+c)python manage.py runserver
+!If you would like to get access to the superuser profile here are the login and password: login - admin; password - 322
