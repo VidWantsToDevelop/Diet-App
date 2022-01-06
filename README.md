@@ -24,7 +24,11 @@ My web application ( Capstone ) is a Django-based one, it consists of one model 
 I believe there are no pre-required files or libraries that must be downloaded. So, you just need to have python and Django framework been installed. I'm not really sure, but maybe the only thing you have to do before running the server is to make migrations from the database. You have to open the directory of the web application in your prompt, then write down these commands:
 
 _a)python manage.py makemigrations dietApp_
+
 _b)python manage.py migrate_
+
 after these preparations, I believe you will be able to start this project by writing down
+
 _c)python manage.py runserver_
+
 ***!If you would like to get access to the superuser profile here are the login and password: login - admin; password - 322***
